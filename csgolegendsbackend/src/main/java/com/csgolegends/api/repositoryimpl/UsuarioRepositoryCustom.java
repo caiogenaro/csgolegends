@@ -11,4 +11,5 @@ public interface UsuarioRepositoryCustom {
     boolean isEmailCadastrado(Usuario usuario);
     boolean isCpfCadastrado(Usuario usuario);
     Usuario procurarUsuarioPorUsername(String username);
+    void atualizarUltimoLogin(Integer id);
 }

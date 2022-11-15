@@ -7,6 +7,7 @@ import com.csgolegends.api.repository.UsuarioRepository;
 import com.csgolegends.api.repositoryimpl.UsuarioRepositoryCustom;
 import com.csgolegends.api.util.NegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,6 +45,7 @@ public class UsuarioService {
             throw new NegocioException("CPF já Cadastrado");
         }
         user.setPermissão(Permissao.USER.toString());
+        user.setSenha(new BCryptPasswordEncoder().encode(user.getPassword()));
 
         return user;
 
