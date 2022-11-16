@@ -4,6 +4,7 @@ package com.csgolegends.api.controller;
 import com.csgolegends.api.dto.LoginDTO;
 import com.csgolegends.api.model.Usuario;
 import com.csgolegends.api.service.TokenService;
+import com.csgolegends.api.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

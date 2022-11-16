@@ -13,7 +13,7 @@ public class Perfil implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "perfil_id")
     private Integer id;
 
     @Column(name = "nome_perfil")

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -43,23 +44,20 @@ public class Usuario implements UserDetails {
     private String cpf;
 
     @Column(name = "data_cadastro")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone="America/Sao_Paulo")
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     private Date dataCadastro;
 
     @Column(name = "ultimo_login")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone="America/Sao_Paulo")
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     private Date lastLogin;
 
-    @Column(name="permissao")
-    private String permissao;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name="perfils")
-    private List<Perfil> perfis = new ArrayList<>();
+    @OneToMany(mappedBy = "perfil", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UsuariosPerfils> perfis = new ArrayList<>();
 
     public Usuario() {
         super();
@@ -70,10 +68,25 @@ public class Usuario implements UserDetails {
         this.senha = senha;
     }
 
+    public Usuario(Integer id, String username, String senha,  String email, String cpf, Date dataCadastro, Date lastLogin)  {
+        this.id = id;
+        this.username = username;
+        this.senha = senha;
+        this.email = email;
+        this.cpf = cpf;
+        this.dataCadastro = dataCadastro;
+        this.lastLogin = lastLogin;
+    }
+
     public Integer getId() {
         return id;
     }
 
+    public void setId(Integer id) { this.id = id;}
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
     public String getUsername() {
         return username;
     }
@@ -93,20 +106,14 @@ public class Usuario implements UserDetails {
         return true;
     }
 
-
-
     @Override
     public boolean isEnabled() {
         return true;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return perfis;
+        return null;
     }
 
     @Override
@@ -146,18 +153,35 @@ public class Usuario implements UserDetails {
         this.dataCadastro = dataCadastro;
     }
 
-    public String getPermissão() {
-        return permissao;
+    public Date getLastLogin() {
+        return lastLogin;
     }
 
-    public void setPermissão(String permissao) {
-        this.permissao = permissao;
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
     }
 
-    public void adicionarPerfil(Perfil perfil){
-        perfis.add(perfil);
+    public List<UsuariosPerfils> getPerfis() {
+        return perfis;
     }
+
+    public void setPerfis(List<UsuariosPerfils> perfis) {
+        this.perfis = perfis;
+    }
+
+    public void adicionarPerfil(UsuariosPerfils item){
+        item.setUser(this);
+        this.perfis.add(item);
+    }
+
     public void removerPerfil(Perfil perfil){
-        perfis.stream().filter(p -> p.getNome() != perfil.getNome()).collect(Collectors.toList());
+        this.perfis.stream().filter(p ->
+                p.getPerfil().getNome() != perfil.getNome())
+                .collect(Collectors.toList());
     }
+
+    public UsernamePasswordAuthenticationToken converter() {
+        return new UsernamePasswordAuthenticationToken(this.username, this.senha);
+    }
+
 }

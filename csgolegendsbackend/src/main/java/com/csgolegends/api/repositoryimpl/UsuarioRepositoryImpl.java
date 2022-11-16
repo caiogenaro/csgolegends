@@ -3,14 +3,16 @@ package com.csgolegends.api.repositoryimpl;
 
 import com.csgolegends.api.model.Usuario;
 import com.csgolegends.api.util.BaseEntityResource;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class UsuarioRepositoryImpl extends BaseEntityResource implements UsuarioRepositoryCustom  {
+
+
+
+
     @Override
     public boolean isUsernameCadastrado(Usuario usuario) {
         StringBuilder sb = new StringBuilder();
@@ -56,22 +58,29 @@ public class UsuarioRepositoryImpl extends BaseEntityResource implements Usuario
         Query q = em.createNativeQuery(sb.toString());
         q.setParameter("username", username);
         Object[] resultado = (Object[]) q.getSingleResult();
-        Usuario usuario = new Usuario(resultado[0].toString(), resultado[1].toString());
+        Usuario usuario = new Usuario(
+                Integer.parseInt(resultado[0].toString()),
+                resultado[1].toString(),
+                resultado[2].toString(),
+                resultado[3].toString(),
+                resultado[4].toString(),
+                (Date) resultado[5],
+                (Date) resultado[7]);
         return usuario;
     }
 
+    @Transactional
     @Override
     public void atualizarUltimoLogin(Integer id) {
         StringBuilder sb = new StringBuilder();
-        sb.append("UPDATE usuarios u ");
-        sb.append("SET u.ultimo_login = :dataHoje ");
-        sb.append("WHERE u.id = :id");
+        sb.append("UPDATE usuarios ");
+        sb.append("SET ultimo_login = :dataHoje ");
+        sb.append("WHERE user_id = :id");
         Query q = em.createNativeQuery(sb.toString());
-
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
         Date dataHoje = new Date();
-        dateFormatter.format(dataHoje);
-        q.setParameter("dataHoje", dateFormatter.format(dataHoje));
+        q.setParameter("dataHoje", dataHoje);
+        q.setParameter("id", id);
+        q.executeUpdate();
     }
 
 

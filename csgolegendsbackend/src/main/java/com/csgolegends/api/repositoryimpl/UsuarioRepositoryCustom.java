@@ -4,6 +4,7 @@ package com.csgolegends.api.repositoryimpl;
 import com.csgolegends.api.model.Usuario;
 import org.springframework.stereotype.Repository;
 
+
 @Repository
 public interface UsuarioRepositoryCustom {
 

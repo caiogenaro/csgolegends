@@ -21,7 +21,12 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Usuario> usuario = Optional.ofNullable(usuarioRepositoryCustom.procurarUsuarioPorUsername(username));
+        Optional<Usuario> usuario = null;
+        try {
+            usuario = Optional.ofNullable(usuarioRepositoryCustom.procurarUsuarioPorUsername(username));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if(usuario.isPresent()){
             return usuario.get();

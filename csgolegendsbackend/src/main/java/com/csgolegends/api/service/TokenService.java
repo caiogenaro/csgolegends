@@ -19,22 +19,25 @@ public class TokenService {
     @Autowired
     private UsuarioRepositoryCustom usuarioRepositoryCustom;
 
+
     @Value("${forum.jwt.expiration}")
     private String expiration;
 
     @Value("${forum.jwt.secret}")
     private String secret;
 
+    @Autowired
+    private UsuarioService usuarioService;
 
-    public String gerarToken(Authentication authentication){
+
+    public String gerarToken(Authentication authentication) {
         Usuario usuario = (Usuario) authentication.getPrincipal();
         Date hoje = new Date();
         Date dataExpiracao = new Date(hoje.getTime() + Long.parseLong(expiration));
-        Usuario usuarioCompleto = usuarioRepositoryCustom.procurarUsuarioPorUsername(usuario.getUsername());
-        usuarioRepositoryCustom.atualizarUltimoLogin(usuarioCompleto.getId());
+        usuarioRepositoryCustom.atualizarUltimoLogin(usuario.getId());
         return Jwts.builder()
                 .setIssuer("Backenn CsGoLegends")
-                .setSubject(usuarioCompleto.getId().toString())
+                .setSubject(usuario.getId().toString())
                 .setIssuedAt(hoje)
                 .setExpiration(dataExpiracao)
                 .signWith(SignatureAlgorithm.HS256, secret)

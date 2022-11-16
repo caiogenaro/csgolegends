@@ -1,10 +1,10 @@
 package com.csgolegends.api.controller;
 
 import com.csgolegends.api.model.Usuario;
-import com.csgolegends.api.repository.UsuarioRepository;
 import com.csgolegends.api.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,17 +14,23 @@ import java.util.List;
 @RequestMapping(value = "/user")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioRepository userRepository;
 
     @Autowired
     private UsuarioService userService;
 
 
+    @Transactional
     @GetMapping(value = "/listarTodos")
     public ResponseEntity<List<Usuario>> listarTodos() {
-        return ResponseEntity.ok(userRepository.findAll());
+        return ResponseEntity.ok(userService.listarTodos());
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Usuario> listarPorId(@PathVariable ("id") Integer id) {
+        return ResponseEntity.ok(userService.listarPorId(id));
+    }
+
+
 
 
     @PostMapping(value = "/cadastrar")
