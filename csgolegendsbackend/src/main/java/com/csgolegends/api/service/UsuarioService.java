@@ -8,6 +8,7 @@ import com.csgolegends.api.model.UsuariosPerfils;
 import com.csgolegends.api.repository.UsuarioRepository;
 import com.csgolegends.api.repositoryimpl.UsuarioRepositoryCustom;
 import com.csgolegends.api.util.NegocioException;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,6 @@ public class UsuarioService {
 
     public Usuario listarPorId(Integer id){
         Usuario usuario = userRepository.findById(id).get();
-        usuario.getPerfis();
         return usuario;
     }
 

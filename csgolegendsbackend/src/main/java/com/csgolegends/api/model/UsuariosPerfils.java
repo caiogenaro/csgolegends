@@ -13,11 +13,11 @@ public class UsuariosPerfils {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id")
     private Usuario user;
 
-    @ManyToOne()
-    @JoinColumn(name = "perfil_id", referencedColumnName = "perfil_id")
+    @ManyToOne
+    @JoinColumn(name = "perfil_id")
     private Perfil perfil;
 
     public UsuariosPerfils() {

@@ -56,7 +56,7 @@ public class Usuario implements UserDetails {
     private Date lastLogin;
 
 
-    @OneToMany(mappedBy = "perfil", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UsuariosPerfils> perfis = new ArrayList<>();
 
     public Usuario() {
