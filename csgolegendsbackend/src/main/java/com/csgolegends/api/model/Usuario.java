@@ -56,8 +56,15 @@ public class Usuario implements UserDetails {
     private Date lastLogin;
 
 
-    @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UsuariosPerfils> perfis = new ArrayList<>();
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    },
+    fetch = FetchType.LAZY)
+    @JoinTable(name = "usuarios_perfils",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "perfil_id"))
+    private List<Perfil> perfis = new ArrayList<>();
 
     public Usuario() {
         super();
@@ -161,22 +168,21 @@ public class Usuario implements UserDetails {
         this.lastLogin = lastLogin;
     }
 
-    public List<UsuariosPerfils> getPerfis() {
+    public List<Perfil> getPerfis() {
         return perfis;
     }
 
-    public void setPerfis(List<UsuariosPerfils> perfis) {
+    public void setPerfis(List<Perfil> perfis) {
         this.perfis = perfis;
     }
 
-    public void adicionarPerfil(UsuariosPerfils item){
-        item.setUser(this);
+    public void adicionarPerfil(Perfil item){
         this.perfis.add(item);
     }
 
     public void removerPerfil(Perfil perfil){
         this.perfis.stream().filter(p ->
-                p.getPerfil().getNome() != perfil.getNome())
+                p.getNome() != perfil.getNome())
                 .collect(Collectors.toList());
     }
 

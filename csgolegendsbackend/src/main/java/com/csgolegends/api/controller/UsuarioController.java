@@ -27,10 +27,9 @@ public class UsuarioController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Usuario> listarPorId(@PathVariable ("id") Integer id) {
-        return ResponseEntity.ok(userService.listarPorId(id));
+        Usuario usuario = userService.listarPorId(id);
+        return ResponseEntity.ok(usuario);
     }
-
-
 
 
     @PostMapping(value = "/cadastrar")

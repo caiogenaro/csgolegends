@@ -1,10 +1,8 @@
 package com.csgolegends.api.service;
 
 
-import com.csgolegends.api.enums.Permissao;
 import com.csgolegends.api.model.Perfil;
 import com.csgolegends.api.model.Usuario;
-import com.csgolegends.api.model.UsuariosPerfils;
 import com.csgolegends.api.repository.UsuarioRepository;
 import com.csgolegends.api.repositoryimpl.UsuarioRepositoryCustom;
 import com.csgolegends.api.util.NegocioException;
@@ -73,9 +71,10 @@ public class UsuarioService {
         user.setLastLogin(dataHoje);
         List<Perfil> listaPerfils = new ArrayList<>();
         listaPerfils = perfilService.buscarTodos();
-        UsuariosPerfils perfil = new UsuariosPerfils();
-        perfil.setPerfil(listaPerfils.get(2));
-        user.adicionarPerfil(perfil);
+        user.adicionarPerfil(listaPerfils.get(2));
+        //UsuariosPerfils perfil = new UsuariosPerfils();
+        //perfil.setPerfil(listaPerfils.get(2));
+        //user.adicionarPerfil(perfil);
         user.setSenha(new BCryptPasswordEncoder().encode(user.getPassword()));
 
         return user;

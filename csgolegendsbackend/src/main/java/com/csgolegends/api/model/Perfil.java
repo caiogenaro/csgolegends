@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "perfils")
@@ -19,6 +21,8 @@ public class Perfil implements GrantedAuthority {
     @Column(name = "nome_perfil")
     private String nome;
 
+    @ManyToMany(mappedBy = "perfis",fetch = FetchType.LAZY)
+    private List<Usuario> user = new ArrayList<>();
 
 
     public Integer getId() {
@@ -35,6 +39,10 @@ public class Perfil implements GrantedAuthority {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public void setUser(List<Usuario> user) {
+        this.user = user;
     }
 
     @Override
