@@ -65,7 +65,7 @@ public class UsuarioRepositoryImpl extends BaseEntityResource implements Usuario
                 resultado[3].toString(),
                 resultado[4].toString(),
                 (Date) resultado[5],
-                (Date) resultado[7]);
+                (Date) resultado[6]);
         return usuario;
     }
 

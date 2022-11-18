@@ -31,7 +31,6 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-
     @PostMapping(value = "/cadastrar")
     public ResponseEntity<Usuario> cadastrar (@Valid @RequestBody Usuario user ) {
         return ResponseEntity.ok(userService.cadastrar(user));

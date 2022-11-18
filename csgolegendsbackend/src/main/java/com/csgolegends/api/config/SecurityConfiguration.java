@@ -2,7 +2,10 @@ package com.csgolegends.api.config;
 
 
 
+import com.csgolegends.api.repository.UsuarioRepository;
 import com.csgolegends.api.service.AuthService;
+import com.csgolegends.api.service.TokenService;
+import com.csgolegends.api.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -26,6 +30,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
 
     @Override
@@ -49,7 +59,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/proplayer", "/proplayer/**").permitAll()
                 .antMatchers("/auth").permitAll()
                 .and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore(new AuthenticationTokenFilter(tokenService, usuarioService), UsernamePasswordAuthenticationFilter.class);
 
     }
 

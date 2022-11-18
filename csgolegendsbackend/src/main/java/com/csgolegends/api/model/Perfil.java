@@ -21,7 +21,7 @@ public class Perfil implements GrantedAuthority {
     @Column(name = "nome_perfil")
     private String nome;
 
-    @ManyToMany(mappedBy = "perfis",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "perfis", fetch = FetchType.LAZY)
     private List<Usuario> user = new ArrayList<>();
 
 

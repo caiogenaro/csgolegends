@@ -2,6 +2,7 @@ package com.csgolegends.api.controller;
 
 
 import com.csgolegends.api.dto.LoginDTO;
+import com.csgolegends.api.dto.TokenDto;
 import com.csgolegends.api.model.Usuario;
 import com.csgolegends.api.service.TokenService;
 import com.csgolegends.api.service.UsuarioService;
@@ -29,13 +30,13 @@ public class AuthController {
     private TokenService tokenService;
 
     @PostMapping()
-    public ResponseEntity<Usuario> autenticar (@Valid @RequestBody LoginDTO login ) {
+    public ResponseEntity<TokenDto> autenticar (@Valid @RequestBody LoginDTO login ) {
         UsernamePasswordAuthenticationToken dadosLogin = login.converter();
         try {
             Authentication authentication = authenticationManager.authenticate(dadosLogin);
             String token = tokenService.gerarToken(authentication);
             System.out.println(token);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(new TokenDto(token, "Bearer"));
         } catch (AuthenticationException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

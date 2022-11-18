@@ -4,8 +4,7 @@ package com.csgolegends.api.service;
 import com.csgolegends.api.dto.LoginDTO;
 import com.csgolegends.api.model.Usuario;
 import com.csgolegends.api.repositoryimpl.UsuarioRepositoryCustom;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -45,5 +44,19 @@ public class TokenService {
     }
 
 
+    public boolean isTokenValido(String token) {
+        try {
+            Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 
+    }
+
+    public Integer getIdUsuario(String token) {
+        Claims claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
+        return Integer.parseInt(claims.getSubject());
+    }
 }

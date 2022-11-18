@@ -56,11 +56,8 @@ public class Usuario implements UserDetails {
     private Date lastLogin;
 
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    },
-    fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL,
+    fetch = FetchType.EAGER)
     @JoinTable(name = "usuarios_perfils",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "perfil_id"))
@@ -120,7 +117,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.perfis;
     }
 
     @Override
